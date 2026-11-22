@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Snake & Ladder Deluxe - 3D Animated Board Game</title>
+  <meta name="description" content="A feature-packed, animated 3D Snake & Ladder game with AI vs Human, Local Multiplayer, Customizable Snakes & Ladders, Board Themes, 3D Dice Skins, and Audio FX.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/board.css">
+  <link rel="stylesheet" href="css/dice.css">
+  <link rel="stylesheet" href="css/animations.css">
+</head>
+<body class="theme-cyberpunk">
+  <!-- Particle Canvas for Victory & In-game Effects -->
+  <canvas id="fx-canvas"></canvas>
+
+  <div id="app" class="app-wrapper">
+    <!-- Top Navigation / Header -->
+    <header class="app-header">
+      <div class="brand-section">
+        <div class="logo-icon">
+          <span class="logo-snake">🐍</span>
+          <span class="logo-ladder">🪜</span>
+        </div>
+        <div class="brand-text">
+          <h1 class="game-title">SNAKE &amp; LADDER</h1>
+          <span class="game-badge">DELUXE 3D</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <div id="header-server-status" class="server-status-pill status-disconnected" title="Multiplayer Server Status">
+          <span class="status-dot"></span>
+          <span>Online Server</span>
+        </div>
+        <button id="btn-theme-modal" class="header-btn" title="Change Board Theme">
+          <span class="btn-icon">🎨</span>
+          <span class="btn-text">Theme</span>
+        </button>
+        <button id="btn-dice-modal" class="header-btn" title="Change Dice Skin">
+          <span class="btn-icon">🎲</span>
+          <span class="btn-text">Dice</span>
+        </button>
+        <button id="btn-board-customizer" class="header-btn" title="Customize Snakes & Ladders">
+          <span class="btn-icon">🛠️</span>
+          <span class="btn-text">Editor</span>
+        </button>
+        <button id="btn-history-modal" class="header-btn" title="Game History & Statistics">
+          <span class="btn-icon">📜</span>
+          <span class="btn-text">History</span>
+        </button>
+        <button id="btn-sound-toggle" class="header-btn sound-btn" title="Toggle Sound">
+          <span class="btn-icon sound-icon">🔊</span>
+        </button>
+        <button id="btn-settings-modal" class="header-btn" title="Game Settings">
+          <span class="btn-icon">⚙️</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Game Viewport -->
+    <main class="main-content">
+      
+      <!-- Welcome / Start Screen Overlay (when no active game) -->
+      <section id="screen-start" class="screen-overlay active">
+        <div class="hero-card glass-panel">
+          <div class="hero-header">
+            <div class="hero-badge">Welcome to the Ultimate Edition</div>
+            <h2 class="hero-title">Choose Your Game Mode</h2>
+            <p class="hero-desc">Play against smart AI bots or challenge friends in local pass-and-play!</p>
+          </div>
+
+          <!-- Continue Game Banner if Saved State Exists -->
+          <div id="continue-game-container" class="continue-container hidden">
+            <div class="continue-card">
+              <div class="continue-info">
+                <span class="continue-tag">RESUME GAME</span>
+                <h3 id="continue-mode-text" class="continue-title">AI Match in Progress</h3>
+                <p id="continue-details-text" class="continue-desc">Turn 12 • 2 Players active</p>
+              </div>
+              <button id="btn-continue-game" class="btn-action btn-primary pulse-btn">
+                <span>▶ Continue</span>
+              </button>
+            </div>
+            <div class="divider"><span>OR START NEW</span></div>
+          </div>
+
+          <!-- Mode Select Grid -->
+          <div class="mode-grid">
+            <div class="mode-card" data-mode="ai">
+              <div class="mode-icon-wrapper ai-bg">
+                <span class="mode-emoji">🤖 vs 👤</span>
+              </div>
+              <h3 class="mode-name">AI vs Human</h3>
+              <p class="mode-info">Play solo against 1 to 5 intelligent computer bots with custom personalities.</p>
+              <button class="btn-select-mode btn-action" data-mode="ai">Play Solo vs AI</button>
+            </div>
+
+            <div class="mode-card" data-mode="human">
+              <div class="mode-icon-wrapper pvp-bg">
+                <span class="mode-emoji">👥</span>
+              </div>
+              <h3 class="mode-name">Pass &amp; Play</h3>
+              <p class="mode-info">Local multiplayer for 2, 3, 4, 5, or 6 players on one screen with friends.</p>
+              <button class="btn-select-mode btn-action" data-mode="human">Local Multiplayer</button>
+            </div>
+
+            <div class="mode-card mode-card-online" data-mode="online">
+              <div class="mode-badge-tag">INSTANT ROOMS</div>
+              <div class="mode-icon-wrapper online-bg">
+                <span class="mode-emoji">🌐</span>
+              </div>
+              <h3 class="mode-name">Online Rooms</h3>
+              <p class="mode-info">Play via browser with 5-letter codes (e.g. K9X2B). Connect across phones & PCs anywhere!</p>
+              <button class="btn-select-mode btn-action btn-online" data-mode="online">Play Online Rooms</button>
+            </div>
+          </div>
+
+          <!-- Quick Setup Panel (Local / AI Modes) -->
+          <div id="setup-panel" class="setup-panel hidden">
+            <div class="setup-header">
+              <button id="btn-setup-back" class="btn-back">← Back</button>
+              <h3 id="setup-title">Game Setup</h3>
+            </div>
+
+            <!-- Player Count Selector (2 to 6 Players) -->
+            <div class="setup-group">
+              <label class="setup-label">Number of Players:</label>
+              <div class="player-count-pills">
+                <button class="count-pill active" data-count="2">2 Players</button>
+                <button class="count-pill" data-count="3">3 Players</button>
+                <button class="count-pill" data-count="4">4 Players</button>
+                <button class="count-pill" data-count="5">5 Players</button>
+                <button class="count-pill" data-count="6">6 Players</button>
+              </div>
+            </div>
+
+            <!-- AI Difficulty Selection (only shown for AI mode) -->
+            <div id="ai-difficulty-group" class="setup-group">
+              <label class="setup-label">AI Difficulty / Personality:</label>
+              <div class="ai-diff-pills">
+                <button class="diff-pill" data-diff="easy">Easy (Casual)</button>
+                <button class="diff-pill active" data-diff="normal">Normal (Balanced)</button>
+                <button class="diff-pill" data-diff="smart">Smart (Strategic)</button>
+              </div>
+            </div>
+
+            <!-- Board Snake/Ladder Preset Selection -->
+            <div class="setup-group">
+              <label class="setup-label">Board Layout Preset:</label>
+              <div class="preset-pills">
+                <button class="preset-pill active" data-preset="classic">Classic (Standard)</button>
+                <button class="preset-pill" data-preset="high_snakes">Venom Hazard (More Snakes)</button>
+                <button class="preset-pill" data-preset="high_ladders">Rapid Climb (More Ladders)</button>
+                <button class="preset-pill" data-preset="custom">Custom Saved</button>
+              </div>
+            </div>
+
+            <!-- Player Roster Customization Cards -->
+            <div class="setup-group">
+              <label class="setup-label">Customize Players &amp; Characters:</label>
+              <div id="player-config-list" class="player-config-grid">
+                <!-- Populated dynamically via JS -->
+              </div>
+            </div>
+
+            <button id="btn-start-match" class="btn-action btn-primary btn-large btn-glow">
+              🚀 Start Game
+            </button>
+          </div>
+
+          <!-- Online Multiplayer Hub Panel (Create Room / Join Room) -->
+          <div id="online-hub-panel" class="setup-panel hidden">
+            <div class="setup-header">
+              <button id="btn-online-back" class="btn-back">← Back</button>
+              <h3>🌐 Online Multiplayer Rooms</h3>
+            </div>
+
+            <!-- Mode Tabs: Create Room vs Join with Code -->
+            <div class="online-tabs">
+              <button id="tab-btn-create-room" class="online-tab-btn active">Create Room</button>
+              <button id="tab-btn-join-room" class="online-tab-btn">Join with Code</button>
+            </div>
+
+            <!-- Tab 1: Create Room Content -->
+            <div id="tab-content-create" class="online-tab-content active">
+              <div class="setup-group">
+                <label class="setup-label">Your Nickname:</label>
+                <input type="text" id="online-host-name" class="custom-input" placeholder="Your Name" value="Player 1" maxlength="16">
+              </div>
+
+              <div class="setup-group">
+                <label class="setup-label">Your Character &amp; Token Color:</label>
+                <div class="online-custom-row">
+                  <button id="btn-online-host-avatar" class="player-avatar-btn" title="Choose Character">
+                    <!-- Rendered via JS -->
+                  </button>
+                  <div id="online-host-colors" class="player-color-picker-row">
+                    <!-- Injected via JS -->
+                  </div>
+                </div>
+              </div>
+
+              <div class="setup-group">
+                <label class="setup-label">Max Room Capacity (2 to 6 Players):</label>
+                <div class="player-count-pills online-count-pills">
+                  <button class="count-pill" data-count="2">2 Players</button>
+                  <button class="count-pill" data-count="3">3 Players</button>
+                  <button class="count-pill active" data-count="4">4 Players</button>
+                  <button class="count-pill" data-count="5">5 Players</button>
+                  <button class="count-pill" data-count="6">6 Players</button>
+                </div>
+              </div>
+
+              <div class="setup-group">
+                <label class="setup-label">Board Layout Preset:</label>
+                <div class="preset-pills online-preset-pills">
+                  <button class="preset-pill active" data-preset="classic">Classic</button>
+                  <button class="preset-pill" data-preset="high_snakes">Venom Hazard</button>
+                  <button class="preset-pill" data-preset="high_ladders">Rapid Climb</button>
+                </div>
+              </div>
+
+              <button id="btn-create-room-submit" class="btn-action btn-primary btn-large btn-glow">
+                🚀 Create Private Room
+              </button>
+            </div>
+
+            <!-- Tab 2: Join with Code Content -->
+            <div id="tab-content-join" class="online-tab-content hidden">
+              <div class="setup-group">
+                <label class="setup-label">Enter 5-Alphanumeric Room Code:</label>
+                <div class="room-code-input-wrap">
+                  <input type="text" id="input-room-code" class="room-code-input" placeholder="K9X2B" maxlength="5" autocomplete="off" spellcheck="false">
+                </div>
+                <p class="customizer-tip">💡 Ask the room host for their 5-letter code or click the invite link they shared!</p>
+              </div>
+
+              <div class="setup-group">
+                <label class="setup-label">Your Nickname:</label>
+                <input type="text" id="online-join-name" class="custom-input" placeholder="Your Name" value="Guest Player" maxlength="16">
+              </div>
+
+              <div class="setup-group">
+                <label class="setup-label">Your Character &amp; Token Color:</label>
+                <div class="online-custom-row">
+                  <button id="btn-online-join-avatar" class="player-avatar-btn" title="Choose Character">
+                    <!-- Rendered via JS -->
+                  </button>
+                  <div id="online-join-colors" class="player-color-picker-row">
+                    <!-- Injected via JS -->
+                  </div>
+                </div>
+              </div>
+
+              <button id="btn-join-room-submit" class="btn-action btn-primary btn-large btn-glow">
+                🔑 Join Room Now
+              </button>
+            </div>
+          </div>
+
+          <!-- Online Waiting Lobby Panel -->
+          <div id="online-lobby-panel" class="setup-panel hidden">
+            <div class="lobby-card glass-panel">
+              <div class="lobby-header">
+                <div class="lobby-tag">PRIVATE MULTIPLAYER ROOM</div>
+                <h3 class="lobby-title">Room Lobby</h3>
+                <p class="lobby-desc">Share this 5-letter code or invite link with your friends to play together!</p>
+              </div>
+
+              <!-- Giant Copyable Room Code -->
+              <div class="room-code-display-box">
+                <div class="code-label">ROOM CODE</div>
+                <div id="lobby-code-display" class="lobby-code-text">-----</div>
+                <div class="lobby-actions-row">
+                  <button id="btn-copy-lobby-code" class="btn-action btn-sm btn-subtle" title="Copy 5-letter code">
+                    📋 Copy Code
+                  </button>
+                  <button id="btn-copy-lobby-link" class="btn-action btn-sm btn-primary" title="Copy shareable browser link">
+                    🔗 Copy Invite Link
+                  </button>
+                </div>
+              </div>
+
+              <!-- Roster of Joined Players -->
+              <div class="lobby-roster-section">
+                <div class="roster-header">
+                  <h4>Joined Players (<span id="lobby-player-count">1</span>/<span id="lobby-max-count">4</span>)</h4>
+                  <span class="live-pulse">🟢 Real-Time Synced</span>
+                </div>
+                <div id="lobby-players-grid" class="lobby-players-grid">
+                  <!-- Populated dynamically via JS -->
+                </div>
+              </div>
+
+              <!-- Host Game Start Controls -->
+              <div class="lobby-footer">
+                <button id="btn-leave-lobby" class="btn-action btn-subtle">
+                  ← Leave Room
+                </button>
+                <button id="btn-start-online-match" class="btn-action btn-primary btn-large btn-glow">
+                  🎮 Start Match
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Active Game Play Area -->
+      <section id="screen-game" class="screen-game">
+        <div class="game-layout">
+          
+          <!-- Left / Top Info Sidebar: Current Turn & Scoreboard -->
+          <aside class="game-sidebar glass-panel">
+            <!-- Active Turn Display Card -->
+            <div class="turn-card">
+              <span class="turn-label">CURRENT TURN</span>
+              <div class="current-player-display">
+                <div id="active-player-avatar" class="active-avatar-wrap">
+                  <!-- Injected SVG -->
+                </div>
+                <div class="active-player-info">
+                  <h3 id="active-player-name">Player 1</h3>
+                  <div class="turn-status-badge">
+                    <span id="active-player-role">Your Turn</span>
+                    <span id="active-player-tile" class="current-tile-tag">Tile 1</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Last Action Message / Announcement -->
+              <div id="game-status-banner" class="status-banner">
+                <span id="status-message">Roll the dice to begin!</span>
+              </div>
+            </div>
+
+            <!-- 3D Interactive Dice Container -->
+            <div class="dice-section">
+              <div class="dice-scene" id="dice-scene" title="Click or tap to Roll Dice">
+                <div id="dice-cube" class="dice-cube dice-skin-cyberpunk show-1">
+                  <div class="dice-face face-1">
+                    <span class="pip pip-center"></span>
+                  </div>
+                  <div class="dice-face face-2">
+                    <span class="pip pip-top-left"></span>
+                    <span class="pip pip-bottom-right"></span>
+                  </div>
+                  <div class="dice-face face-3">
+                    <span class="pip pip-top-left"></span>
+                    <span class="pip pip-center"></span>
+                    <span class="pip pip-bottom-right"></span>
+                  </div>
+                  <div class="dice-face face-4">
+                    <span class="pip pip-top-left"></span>
+                    <span class="pip pip-top-right"></span>
+                    <span class="pip pip-bottom-left"></span>
+                    <span class="pip pip-bottom-right"></span>
+                  </div>
+                  <div class="dice-face face-5">
+                    <span class="pip pip-top-left"></span>
+                    <span class="pip pip-top-right"></span>
+                    <span class="pip pip-center"></span>
+                    <span class="pip pip-bottom-left"></span>
+                    <span class="pip pip-bottom-right"></span>
+                  </div>
+                  <div class="dice-face face-6">
+                    <span class="pip pip-top-left"></span>
+                    <span class="pip pip-top-right"></span>
+                    <span class="pip pip-mid-left"></span>
+                    <span class="pip pip-mid-right"></span>
+                    <span class="pip pip-bottom-left"></span>
+                    <span class="pip pip-bottom-right"></span>
+                  </div>
+                </div>
+                <div class="dice-shadow"></div>
+              </div>
+
+              <div class="dice-controls">
+                <button id="btn-roll-dice" class="btn-action btn-roll pulse-btn">
+                  <span class="roll-icon">🎲</span>
+                  <span id="roll-btn-text">ROLL (Space)</span>
+                </button>
+                <div class="dice-last-result">
+                  <span>Rolled:</span>
+                  <strong id="dice-result-val">-</strong>
+                </div>
+              </div>
+            </div>
+
+            <!-- In-game Live Scoreboard / Player Positions -->
+            <div class="scoreboard-section">
+              <div class="scoreboard-header">
+                <h4>Leaderboard &amp; Players</h4>
+                <span id="game-turn-counter" class="turn-count-badge">Turn 1</span>
+              </div>
+              <div id="live-scoreboard" class="players-live-list">
+                <!-- Injected dynamically -->
+              </div>
+            </div>
+
+            <!-- Quick In-Game Controls -->
+            <div class="ingame-actions">
+              <button id="btn-new-game-confirm" class="btn-subtle" title="Return to Menu / New Game">
+                🔄 New Game
+              </button>
+              <button id="btn-replay-last" class="btn-subtle" title="View Turn Log">
+                📋 Move Log
+              </button>
+            </div>
+          </aside>
+
+          <!-- Center: The 10x10 Snake & Ladder Board -->
+          <div class="board-wrapper">
+            <!-- Online Room In-Game Header Banner -->
+            <div id="ingame-online-badge" class="ingame-online-badge hidden">
+              <div class="online-badge-left">
+                <span class="live-dot"></span>
+                <span>ROOM:</span>
+                <strong id="ingame-room-code-text">-----</strong>
+              </div>
+              <div class="online-badge-actions">
+                <button id="btn-copy-ingame-code" class="btn-xs btn-subtle" title="Copy 5-Letter Code">📋 Copy Code</button>
+                <button id="btn-copy-ingame-link" class="btn-xs btn-primary" title="Copy Invite Link">🔗 Share Link</button>
+              </div>
+            </div>
+
+            <div class="board-outer-frame">
+              
+              <!-- Board Canvas Layer for dynamic snake animations / paths -->
+              <div id="board-container" class="board-container">
+                <!-- SVG Canvas for Smooth Bezier Snakes & Ladders -->
+                <svg id="board-svg-layer" class="board-svg-layer" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+                  <defs id="board-svg-defs">
+                    <!-- Dynamic filters, gradients & markers injected by board.js -->
+                  </defs>
+                  <g id="svg-ladders-group"></g>
+                  <g id="svg-snakes-group"></g>
+                  <g id="svg-effects-group"></g>
+                </svg>
+
+                <!-- Grid Tiles (100 to 1 in zigzag order) -->
+                <div id="board-grid" class="board-grid">
+                  <!-- 100 tiles generated by JS -->
+                </div>
+
+                <!-- Floating Pawn Tokens Container -->
+                <div id="pawns-layer" class="pawns-layer">
+                  <!-- Animated Player Pawns -->
+                </div>
+
+                <!-- Highlight Overlay for movement trails -->
+                <div id="board-fx-overlay" class="board-fx-overlay"></div>
+              </div>
+
+              <!-- Board Corner Badges -->
+              <div class="board-start-flag">🏁 START (1)</div>
+              <div class="board-finish-flag">🏆 FINISH (100)</div>
+            </div>
+
+            <!-- In-Game Quick Emoji Reaction Bar -->
+            <div id="quick-reaction-bar" class="quick-reaction-bar">
+              <span class="reaction-label">Quick Reactions:</span>
+              <div class="reaction-btn-row">
+                <button class="btn-reaction" data-emoji="😂" title="Laugh">😂</button>
+                <button class="btn-reaction" data-emoji="🐍" title="Snake!">🐍</button>
+                <button class="btn-reaction" data-emoji="🪜" title="Ladder!">🪜</button>
+                <button class="btn-reaction" data-emoji="🎲" title="Dice">🎲</button>
+                <button class="btn-reaction" data-emoji="👑" title="Crown">👑</button>
+                <button class="btn-reaction" data-emoji="😱" title="Shock!">😱</button>
+                <button class="btn-reaction" data-emoji="🔥" title="Fire!">🔥</button>
+                <button class="btn-reaction" data-emoji="👏" title="Clap">👏</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </main>
+
+    <!-- ================= MODALS ================= -->
+
+    <!-- 1. Theme Selector Modal -->
+    <div id="modal-theme" class="modal-backdrop hidden">
+      <div class="modal-card glass-panel">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="modal-icon">🎨</span>
+            <h3>Select Board Theme</h3>
+          </div>
+          <button class="btn-modal-close" data-close="modal-theme">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-subtext">Choose a visual atmosphere for the tiles, snakes, ladders, and lighting.</p>
+          <div class="theme-grid" id="theme-options-grid">
+            <!-- Populated dynamically via themes.js -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Dice Skin Modal -->
+    <div id="modal-dice" class="modal-backdrop hidden">
+      <div class="modal-card glass-panel">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="modal-icon">🎲</span>
+            <h3>Dice Skins &amp; Materials</h3>
+          </div>
+          <button class="btn-modal-close" data-close="modal-dice">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-subtext">Customize the 3D dice appearance, materials, and glowing effects.</p>
+          <div class="dice-skin-grid" id="dice-skins-grid">
+            <!-- Populated dynamically via dice.js -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Character / Avatar Selector Modal -->
+    <div id="modal-characters" class="modal-backdrop hidden">
+      <div class="modal-card glass-panel">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="modal-icon">🎭</span>
+            <h3 id="char-modal-title">Choose Character</h3>
+          </div>
+          <button class="btn-modal-close" data-close="modal-characters">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-subtext">Select an animated avatar and token style for your player.</p>
+          <div class="character-grid" id="characters-picker-grid">
+            <!-- Populated dynamically via characters.js -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Snakes & Ladders Customizer / Board Editor Modal -->
+    <div id="modal-customizer" class="modal-backdrop hidden">
+      <div class="modal-card modal-large glass-panel">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="modal-icon">🛠️</span>
+            <h3>Snake &amp; Ladder Customizer</h3>
+          </div>
+          <button class="btn-modal-close" data-close="modal-customizer">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="customizer-layout">
+            
+            <!-- Customizer Controls -->
+            <div class="customizer-controls">
+              <h4>Board Configuration</h4>
+              <p class="customizer-tip">Add, edit, or delete snakes and ladders. All positions must be between 2 and 99 with no overlapping heads/bases.</p>
+              
+              <!-- Quick Presets -->
+              <div class="customizer-presets">
+                <label>Load Preset:</label>
+                <div class="preset-btn-row">
+                  <button class="btn-subtle" id="btn-load-preset-classic">Classic</button>
+                  <button class="btn-subtle" id="btn-load-preset-snakes">High Hazard</button>
+                  <button class="btn-subtle" id="btn-load-preset-ladders">High Climb</button>
+                  <button class="btn-subtle" id="btn-clear-all-elements">Clear All</button>
+                </div>
+              </div>
+
+              <!-- Add Element Form -->
+              <div class="add-element-card">
+                <h5>Add New Element</h5>
+                <div class="add-form-row">
+                  <div class="form-group">
+                    <label>Type:</label>
+                    <select id="custom-element-type" class="custom-select">
+                      <option value="snake">🐍 Snake (Bite &amp; Slide)</option>
+                      <option value="ladder">🪜 Ladder (Climb Up)</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label id="custom-start-label">Head Tile (Drop from):</label>
+                    <input type="number" id="custom-from-tile" min="2" max="99" value="50" class="custom-input">
+                  </div>
+                  <div class="form-group">
+                    <label id="custom-end-label">Tail Tile (Slide to):</label>
+                    <input type="number" id="custom-to-tile" min="1" max="98" value="12" class="custom-input">
+                  </div>
+                </div>
+                <button id="btn-add-custom-element" class="btn-action btn-primary btn-sm">
+                  + Add to Board
+                </button>
+                <div id="custom-validation-msg" class="validation-msg"></div>
+              </div>
+
+              <!-- List of Active Elements -->
+              <div class="elements-list-container">
+                <h5>Active Snakes (<span id="count-snakes">0</span>)</h5>
+                <div id="custom-snakes-list" class="items-list"></div>
+
+                <h5>Active Ladders (<span id="count-ladders">0</span>)</h5>
+                <div id="custom-ladders-list" class="items-list"></div>
+              </div>
+
+              <div class="customizer-footer">
+                <button id="btn-save-custom-board" class="btn-action btn-primary btn-large">
+                  💾 Apply to Current Game
+                </button>
+              </div>
+            </div>
+
+            <!-- Mini Live Board Preview -->
+            <div class="customizer-preview">
+              <div class="preview-header">
+                <span>Live Board Preview</span>
+              </div>
+              <div id="preview-board-wrap" class="preview-board-wrap">
+                <!-- Mini canvas/board preview -->
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. History & Statistics Modal -->
+    <div id="modal-history" class="modal-backdrop hidden">
+      <div class="modal-card modal-large glass-panel">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="modal-icon">📜</span>
+            <h3>Match History &amp; Statistics</h3>
+          </div>
+          <button class="btn-modal-close" data-close="modal-history">&times;</button>
+        </div>
+        <div class="modal-body">
+          <!-- Stats Summary Bar -->
+          <div class="stats-overview-grid">
+            <div class="stat-card">
+              <span class="stat-num" id="stat-total-games">0</span>
+              <span class="stat-lbl">Games Played</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-num" id="stat-human-wins">0</span>
+              <span class="stat-lbl">Human Victories</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-num" id="stat-ai-wins">0</span>
+              <span class="stat-lbl">AI Victories</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-num" id="stat-snakes-bitten">0</span>
+              <span class="stat-lbl">Snakes Bitten</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-num" id="stat-ladders-climbed">0</span>
+              <span class="stat-lbl">Ladders Climbed</span>
+            </div>
+          </div>
+
+          <!-- History Table -->
+          <div class="history-table-wrap">
+            <div class="history-table-header">
+              <h4>Recent Matches</h4>
+              <button id="btn-clear-history" class="btn-subtle btn-xs">Clear Records</button>
+            </div>
+            <div id="history-items-container" class="history-items-list">
+              <!-- Rendered via storage.js -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Move Log Modal -->
+    <div id="modal-movelog" class="modal-backdrop hidden">
+      <div class="modal-card glass-panel">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="modal-icon">📋</span>
+            <h3>Game Move Log</h3>
+          </div>
+          <button class="btn-modal-close" data-close="modal-movelog">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div id="move-log-list" class="move-log-list">
+            <!-- Injected dynamically -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. Settings Modal -->
+    <div id="modal-settings" class="modal-backdrop hidden">
+      <div class="modal-card glass-panel">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="modal-icon">⚙️</span>
+            <h3>Settings &amp; Options</h3>
+          </div>
+          <button class="btn-modal-close" data-close="modal-settings">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="settings-list">
+            <div class="setting-row">
+              <div class="setting-info">
+                <span class="setting-name">Sound Effects</span>
+                <span class="setting-desc">Play procedural dice rolls, pawn steps, and fanfare.</span>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="setting-sfx" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <span class="setting-name">SFX Volume</span>
+                <span class="setting-desc">Adjust sound volume level.</span>
+              </div>
+              <input type="range" id="setting-volume" min="0" max="100" value="75" class="range-slider">
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <span class="setting-name">Fast Pawn Animation</span>
+                <span class="setting-desc">Speed up step-by-step movement.</span>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="setting-fast-mode">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <span class="setting-name">Camera &amp; Screen Shake</span>
+                <span class="setting-desc">Enable dynamic screen shake on snake bites.</span>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="setting-shake" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <span class="setting-name">Auto-Roll for AI</span>
+                <span class="setting-desc">Let AI bots roll automatically after a brief thinking pause.</span>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="setting-ai-autoroll" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. Victory / Game Over Modal -->
+    <div id="modal-victory" class="modal-backdrop hidden victory-backdrop">
+      <div class="modal-card victory-card glass-panel">
+        <div class="trophy-emitter">
+          <span class="trophy-emoji">🏆</span>
+          <div class="winner-crown">👑</div>
+        </div>
+        
+        <h2 class="victory-title">VICTORY!</h2>
+        <div id="victory-avatar-wrap" class="victory-avatar-wrap">
+          <!-- Animated winner character -->
+        </div>
+        <h3 id="victory-winner-name" class="victory-winner-name">Player 1 Wins!</h3>
+        <p id="victory-summary-text" class="victory-summary-text">Reached Tile 100 in 18 turns!</p>
+
+        <div class="victory-stats-row">
+          <div class="v-stat">
+            <span class="v-stat-num" id="v-stat-turns">18</span>
+            <span class="v-stat-lbl">Turns</span>
+          </div>
+          <div class="v-stat">
+            <span class="v-stat-num" id="v-stat-ladders">3</span>
+            <span class="v-stat-lbl">Ladders</span>
+          </div>
+          <div class="v-stat">
+            <span class="v-stat-num" id="v-stat-snakes">1</span>
+            <span class="v-stat-lbl">Snakes</span>
+          </div>
+        </div>
+
+        <div class="victory-buttons">
+          <button id="btn-victory-rematch" class="btn-action btn-primary btn-large btn-glow">
+            🔁 Play Again
+          </button>
+          <button id="btn-victory-menu" class="btn-action btn-subtle">
+            🏠 Main Menu
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Floating Reactions Layer (Live stream style emojis) -->
+    <div id="floating-reactions-layer" class="floating-reactions-layer"></div>
+
+  </div>
+
+  <!-- Socket.IO Client Library (with fallback CDN) -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    if (typeof io === 'undefined') {
+      const cdnScript = document.createElement('script');
+      cdnScript.src = 'https://cdn.socket.io/4.8.1/socket.io.min.js';
+      document.head.appendChild(cdnScript);
+    }
+  </script>
+
+  <!-- JavaScript Modules -->
+  <script src="js/audio.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/characters.js"></script>
+  <script src="js/themes.js"></script>
+  <script src="js/confetti.js"></script>
+  <script src="js/dice.js"></script>
+  <script src="js/board.js"></script>
+  <script src="js/ai.js"></script>
+  <script src="js/multiplayer.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

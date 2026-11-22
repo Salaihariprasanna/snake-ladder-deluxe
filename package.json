@@ -1,0 +1,32 @@
+{
+  "name": "snake-ladder-deluxe",
+  "version": "2.0.0",
+  "description": "Snake & Ladder Deluxe 3D - Animated Board Game with AI, Local & Online Multiplayer Rooms",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "snake-and-ladder",
+    "multiplayer",
+    "socket.io",
+    "board-game",
+    "html5-game",
+    "webaudio",
+    "canvas-particles"
+  ],
+  "author": "Snake & Ladder Deluxe",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.21.2",
+    "socket.io": "^4.8.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "jsdom": "^29.1.1",
+    "socket.io-client": "^4.8.3"
+  }
+}

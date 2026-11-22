@@ -1,0 +1,245 @@
+/* ==========================================================================
+   Snake & Ladder Deluxe - 3D Dice CSS & Skins
+   ========================================================================== */
+
+:root {
+  --dice-size: 70px;
+  --dice-half-size: 35px;
+}
+
+.dice-scene {
+  width: var(--dice-size);
+  height: var(--dice-size);
+  perspective: 600px;
+  margin: 10px auto 14px;
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dice-cube {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+}
+
+/* Rolling Animation State */
+.dice-cube.is-rolling {
+  animation: diceRollSpin 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+}
+
+.dice-face {
+  position: absolute;
+  width: var(--dice-size);
+  height: var(--dice-size);
+  border-radius: 12px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  padding: 8px;
+  box-sizing: border-box;
+  backface-visibility: hidden;
+  user-select: none;
+}
+
+/* Face 3D Transformations */
+.face-1 { transform: rotateY(0deg) translateZ(var(--dice-half-size)); }
+.face-6 { transform: rotateY(180deg) translateZ(var(--dice-half-size)); }
+.face-2 { transform: rotateY(-90deg) translateZ(var(--dice-half-size)); }
+.face-3 { transform: rotateY(90deg) translateZ(var(--dice-half-size)); }
+.face-4 { transform: rotateX(-90deg) translateZ(var(--dice-half-size)); }
+.face-5 { transform: rotateX(90deg) translateZ(var(--dice-half-size)); }
+
+/* Show Results Transformations */
+.dice-cube.show-1 { transform: rotateX(0deg) rotateY(0deg); }
+.dice-cube.show-2 { transform: rotateX(0deg) rotateY(90deg); }
+.dice-cube.show-3 { transform: rotateX(0deg) rotateY(-90deg); }
+.dice-cube.show-4 { transform: rotateX(90deg) rotateY(0deg); }
+.dice-cube.show-5 { transform: rotateX(-90deg) rotateY(0deg); }
+.dice-cube.show-6 { transform: rotateX(0deg) rotateY(180deg); }
+
+/* Pip Positioning in 3x3 Grid */
+.pip {
+  display: block;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  align-self: center;
+  justify-self: center;
+}
+
+.pip-center { grid-area: 2 / 2; }
+.pip-top-left { grid-area: 1 / 1; }
+.pip-top-right { grid-area: 1 / 3; }
+.pip-mid-left { grid-area: 2 / 1; }
+.pip-mid-right { grid-area: 2 / 3; }
+.pip-bottom-left { grid-area: 3 / 1; }
+.pip-bottom-right { grid-area: 3 / 3; }
+
+/* Dice Shadow */
+.dice-shadow {
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 16px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  filter: blur(4px);
+  z-index: -1;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.dice-cube.is-rolling ~ .dice-shadow {
+  animation: shadowPulse 0.7s infinite alternate ease-in-out;
+}
+
+/* ==========================================================================
+   Dice Skins & Materials
+   ========================================================================== */
+
+/* 1. Cyberpunk Neon (Default) */
+.dice-skin-cyberpunk .dice-face {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border: 2px solid #06b6d4;
+  box-shadow: inset 0 0 10px rgba(6, 182, 212, 0.4), 0 0 15px rgba(6, 182, 212, 0.2);
+}
+.dice-skin-cyberpunk .pip {
+  background: #38bdf8;
+  box-shadow: 0 0 8px #38bdf8, 0 0 14px #06b6d4;
+}
+
+/* 2. Classic Ivory */
+.dice-skin-classic .dice-face {
+  background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+  border: 1px solid #cbd5e1;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.15), 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+.dice-skin-classic .pip {
+  background: #1e293b;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
+}
+.dice-skin-classic .face-1 .pip {
+  background: #dc2626;
+  width: 14px;
+  height: 14px;
+}
+
+/* 3. Royal Gold & Diamond */
+.dice-skin-gold .dice-face {
+  background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #d97706 100%);
+  border: 2px solid #fef08a;
+  box-shadow: inset 0 0 12px rgba(254, 240, 138, 0.5), 0 0 20px rgba(245, 158, 11, 0.4);
+}
+.dice-skin-gold .pip {
+  background: #ffffff;
+  box-shadow: 0 0 8px #ffffff, inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* 4. Magma Flame */
+.dice-skin-magma .dice-face {
+  background: linear-gradient(135deg, #18181b 0%, #27272a 100%);
+  border: 2px solid #ea580c;
+  box-shadow: inset 0 0 12px rgba(234, 88, 12, 0.6), 0 0 20px rgba(239, 68, 68, 0.3);
+}
+.dice-skin-magma .pip {
+  background: #f97316;
+  box-shadow: 0 0 10px #f97316, 0 0 16px #ef4444;
+}
+
+/* 5. Emerald Jade */
+.dice-skin-emerald .dice-face {
+  background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
+  border: 2px solid #34d399;
+  box-shadow: inset 0 0 10px rgba(52, 211, 153, 0.4), 0 0 15px rgba(16, 185, 129, 0.3);
+}
+.dice-skin-emerald .pip {
+  background: #fef08a;
+  box-shadow: 0 0 8px #fef08a;
+}
+
+/* 6. Cosmic Starlight */
+.dice-skin-cosmic .dice-face {
+  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+  border: 2px solid #a855f7;
+  box-shadow: inset 0 0 12px rgba(168, 85, 247, 0.5), 0 0 20px rgba(168, 85, 247, 0.3);
+}
+.dice-skin-cosmic .pip {
+  background: #38bdf8;
+  box-shadow: 0 0 8px #38bdf8, 0 0 14px #a855f7;
+}
+
+/* Dice Skin Selector Grid in Modal */
+.dice-skin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 14px;
+}
+
+.dice-skin-card {
+  background: var(--bg-surface);
+  border: 2px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  padding: 16px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.dice-skin-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-glow);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.dice-skin-card.active {
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+  background: rgba(6, 182, 212, 0.15);
+}
+
+.dice-skin-preview {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.dice-skin-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+/* Animations */
+@keyframes diceRollSpin {
+  0% {
+    transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  }
+  33% {
+    transform: rotateX(360deg) rotateY(180deg) rotateZ(90deg);
+  }
+  66% {
+    transform: rotateX(720deg) rotateY(540deg) rotateZ(180deg);
+  }
+  100% {
+    transform: rotateX(1080deg) rotateY(720deg) rotateZ(360deg);
+  }
+}
+
+@keyframes shadowPulse {
+  0% { transform: translateX(-50%) scale(0.8); opacity: 0.3; }
+  100% { transform: translateX(-50%) scale(1.2); opacity: 0.7; }
+}

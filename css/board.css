@@ -1,0 +1,407 @@
+/* ==========================================================================
+   Snake & Ladder Deluxe - Board & Pawns CSS
+   ========================================================================== */
+
+.board-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.board-outer-frame {
+  position: relative;
+  width: 100%;
+  max-width: 680px;
+  aspect-ratio: 1;
+  padding: 12px;
+  background: var(--board-bg);
+  border: 4px solid var(--board-border);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px var(--border-glow);
+  box-sizing: border-box;
+}
+
+@media (max-width: 600px) {
+  .board-outer-frame {
+    padding: 6px;
+    border-width: 2px;
+  }
+}
+
+.board-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--board-bg);
+}
+
+/* 10x10 Grid System */
+.board-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.board-tile {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 3px 5px;
+  border: 1px solid var(--tile-border);
+  transition: background-color var(--transition-fast);
+  box-sizing: border-box;
+}
+
+.board-tile.tile-even {
+  background-color: var(--tile-even);
+}
+
+.board-tile.tile-odd {
+  background-color: var(--tile-odd);
+}
+
+.board-tile.tile-1 {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.3), var(--tile-odd)) !important;
+  border-color: rgba(16, 185, 129, 0.4);
+}
+
+.board-tile.tile-100 {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.35), var(--tile-even)) !important;
+  border-color: rgba(251, 191, 36, 0.6);
+  animation: pulseGold 2s infinite alternate;
+}
+
+.tile-number {
+  font-family: var(--font-mono);
+  font-size: clamp(0.6rem, 1.3vw, 0.85rem);
+  font-weight: 700;
+  color: var(--tile-num-color);
+  opacity: 0.8;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.tile-special-icon {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  font-size: clamp(0.65rem, 1.4vw, 0.95rem);
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.board-tile.tile-highlighted {
+  box-shadow: inset 0 0 15px rgba(251, 191, 36, 0.8);
+  border-color: #fbbf24 !important;
+}
+
+/* SVG Overlay for Snakes and Ladders */
+.board-svg-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Snake SVG Path Styles */
+.svg-snake-body {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.6));
+  transition: stroke 0.3s ease;
+}
+
+.svg-snake-belly {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 4, 8;
+  opacity: 0.6;
+}
+
+.svg-snake-head {
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.7));
+  cursor: pointer;
+  pointer-events: all;
+}
+
+.snake-head-inner {
+  transform-origin: 0 0;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.svg-snake:hover .snake-head-inner {
+  transform: scale(1.15);
+}
+
+.snake-tongue-group {
+  transform-box: fill-box;
+  transform-origin: 17px 0px;
+  animation: snakeTongueFlick 1.4s infinite ease-in-out;
+}
+
+.snake-tongue {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+}
+
+/* Ladder SVG Styles */
+.svg-ladder-rail {
+  stroke-linecap: round;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
+}
+
+.svg-ladder-rung {
+  stroke-linecap: round;
+}
+
+/* Pawns Container Layer */
+.pawns-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 30;
+}
+
+/* Player Pawn Token */
+.player-pawn {
+  position: absolute;
+  width: 9%;
+  height: 9%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: left 0.28s cubic-bezier(0.34, 1.4, 0.64, 1), top 0.28s cubic-bezier(0.34, 1.4, 0.64, 1);
+  will-change: left, top, transform;
+}
+
+.pawn-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pawn-avatar {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.6));
+}
+
+.pawn-avatar svg {
+  width: 90%;
+  height: 90%;
+}
+
+.pawn-shadow {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 20%;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+  filter: blur(2px);
+  z-index: -1;
+}
+
+.pawn-indicator {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 6px currentColor;
+}
+
+.player-pawn.is-active-turn .pawn-inner {
+  animation: activePawnBounce 0.8s infinite alternate ease-in-out;
+}
+
+.player-pawn.is-sliding,
+.player-pawn.is-climbing {
+  transition: none !important;
+}
+
+.player-pawn.is-hopping .pawn-avatar {
+  animation: pawnHopArc 0.28s ease-out;
+}
+
+.player-pawn.is-hopping .pawn-shadow {
+  animation: pawnShadowPulse 0.28s ease-out;
+}
+
+.player-pawn.is-sliding .pawn-avatar {
+  animation: pawnSlideSquish 0.35s infinite alternate ease-in-out;
+}
+
+.player-pawn.is-climbing .pawn-avatar {
+  animation: pawnClimbSparkle 0.4s infinite alternate ease-in-out;
+}
+
+.pawn-name-tag {
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-weight: 800;
+  color: #ffffff;
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.3px;
+  z-index: 10;
+}
+
+/* Active Snake Bite & Ladder Climb Glowing FX */
+.svg-snake.snake-active-bite .svg-snake-body {
+  stroke: #ff1744 !important;
+  filter: drop-shadow(0 0 18px #ff1744) drop-shadow(0 0 32px #ef4444) !important;
+  stroke-width: 22px !important;
+  animation: snakeBitePulse 0.4s infinite alternate ease-in-out;
+}
+
+.svg-snake.snake-active-bite .svg-snake-head {
+  filter: drop-shadow(0 0 24px #ff1744) !important;
+}
+
+.svg-snake.snake-active-bite .snake-head-inner {
+  transform: scale(1.35);
+  animation: snakeHeadChomp 0.35s infinite alternate ease-in-out;
+}
+
+.svg-ladder.ladder-active-climb .svg-ladder-rail,
+.svg-ladder.ladder-active-climb .svg-ladder-rung {
+  stroke: #fde047 !important;
+  filter: drop-shadow(0 0 18px #fde047) drop-shadow(0 0 30px #f59e0b) !important;
+  animation: ladderClimbBeam 0.45s infinite alternate ease-in-out;
+}
+
+@keyframes snakeBitePulse {
+  0% { filter: drop-shadow(0 0 12px #ff1744); }
+  100% { filter: drop-shadow(0 0 26px #ef4444) drop-shadow(0 0 40px #dc2626); }
+}
+
+@keyframes ladderClimbBeam {
+  0% { filter: drop-shadow(0 0 12px #fde047); }
+  100% { filter: drop-shadow(0 0 26px #fbbf24) drop-shadow(0 0 40px #f59e0b); }
+}
+
+/* Flags */
+.board-start-flag {
+  position: absolute;
+  bottom: -10px;
+  left: 16px;
+  background: #10b981;
+  color: #ffffff;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.5);
+  z-index: 40;
+}
+
+.board-finish-flag {
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fbbf24;
+  color: #1e1b4b;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  box-shadow: 0 2px 8px rgba(251, 191, 36, 0.5);
+  z-index: 40;
+}
+
+/* Animations */
+@keyframes snakeTongueFlick {
+  0%, 100% {
+    transform: scaleX(0.7) rotate(0deg);
+  }
+  20% {
+    transform: scaleX(1.35) rotate(-6deg);
+  }
+  40% {
+    transform: scaleX(0.85) rotate(5deg);
+  }
+  60% {
+    transform: scaleX(1.4) rotate(-3deg);
+  }
+  80% {
+    transform: scaleX(1.1) rotate(2deg);
+  }
+}
+
+@keyframes snakeHeadChomp {
+  0% { transform: scale(1.22); }
+  100% { transform: scale(1.42); }
+}
+
+@keyframes activePawnBounce {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-6px); }
+}
+
+@keyframes pawnHopArc {
+  0% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-16px) scale(1.18); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+@keyframes pawnShadowPulse {
+  0% { transform: translateX(-50%) scale(1); opacity: 0.4; }
+  50% { transform: translateX(-50%) scale(0.65); opacity: 0.18; }
+  100% { transform: translateX(-50%) scale(1); opacity: 0.4; }
+}
+
+@keyframes pawnSlideSquish {
+  0% { transform: scale(1.12, 0.88); }
+  100% { transform: scale(0.92, 1.14); }
+}
+
+@keyframes pawnClimbSparkle {
+  0% { filter: drop-shadow(0 0 4px #fbbf24) brightness(1.1); transform: scale(1); }
+  100% { filter: drop-shadow(0 0 16px #fde047) brightness(1.4); transform: scale(1.15); }
+}
+
+@keyframes pulseGold {
+  0% { box-shadow: inset 0 0 10px rgba(251, 191, 36, 0.3); }
+  100% { box-shadow: inset 0 0 25px rgba(251, 191, 36, 0.8); }
+}

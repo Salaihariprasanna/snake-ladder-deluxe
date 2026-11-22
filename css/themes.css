@@ -1,0 +1,214 @@
+/* ==========================================================================
+   Snake & Ladder Deluxe - Visual Themes
+   ========================================================================== */
+
+/* 1. CYBERPUNK NEON (Default) */
+body.theme-cyberpunk {
+  --bg-primary: #080b14;
+  --bg-surface: rgba(14, 20, 36, 0.85);
+  --bg-surface-hover: rgba(22, 33, 58, 0.9);
+  --border-glass: rgba(56, 189, 248, 0.2);
+  --border-glow: rgba(56, 189, 248, 0.5);
+
+  --board-bg: #0b1120;
+  --board-border: #0284c7;
+  --tile-even: #0f172a;
+  --tile-odd: #1e293b;
+  --tile-num-color: #38bdf8;
+  --tile-border: rgba(56, 189, 248, 0.12);
+
+  --snake-head-color: #f43f5e;
+  --snake-body-color: #be123c;
+  --snake-glow: rgba(244, 63, 94, 0.6);
+
+  --ladder-rail-color: #06b6d4;
+  --ladder-rung-color: #38bdf8;
+  --ladder-glow: rgba(6, 182, 212, 0.6);
+
+  --btn-primary-bg: linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #8b5cf6 100%);
+  --btn-primary-shadow: 0 8px 25px rgba(6, 182, 212, 0.4);
+}
+
+/* 2. JUNGLE SAFARI */
+body.theme-jungle {
+  --bg-primary: #061e12;
+  --bg-surface: rgba(11, 44, 28, 0.85);
+  --bg-surface-hover: rgba(18, 64, 42, 0.9);
+  --border-glass: rgba(52, 211, 153, 0.25);
+  --border-glow: rgba(16, 185, 129, 0.6);
+
+  --board-bg: #072a18;
+  --board-border: #059669;
+  --tile-even: #0c3822;
+  --tile-odd: #134e30;
+  --tile-num-color: #a7f3d0;
+  --tile-border: rgba(52, 211, 153, 0.15);
+
+  --snake-head-color: #f59e0b;
+  --snake-body-color: #b45309;
+  --snake-glow: rgba(245, 158, 11, 0.5);
+
+  --ladder-rail-color: #d97706;
+  --ladder-rung-color: #fcd34d;
+  --ladder-glow: rgba(217, 119, 6, 0.5);
+
+  --btn-primary-bg: linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%);
+  --btn-primary-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+}
+
+/* 3. MEDIEVAL CASTLE / DUNGEON */
+body.theme-medieval {
+  --bg-primary: #181413;
+  --bg-surface: rgba(43, 34, 30, 0.88);
+  --bg-surface-hover: rgba(66, 52, 45, 0.9);
+  --border-glass: rgba(217, 119, 6, 0.25);
+  --border-glow: rgba(245, 158, 11, 0.6);
+
+  --board-bg: #1c1613;
+  --board-border: #78350f;
+  --tile-even: #29211c;
+  --tile-odd: #3b2f28;
+  --tile-num-color: #fde68a;
+  --tile-border: rgba(217, 119, 6, 0.18);
+
+  --snake-head-color: #dc2626;
+  --snake-body-color: #7f1d1d;
+  --snake-glow: rgba(220, 38, 38, 0.6);
+
+  --ladder-rail-color: #a16207;
+  --ladder-rung-color: #eab308;
+  --ladder-glow: rgba(234, 179, 8, 0.5);
+
+  --btn-primary-bg: linear-gradient(135deg, #b45309 0%, #d97706 50%, #f59e0b 100%);
+  --btn-primary-shadow: 0 8px 25px rgba(217, 119, 6, 0.4);
+}
+
+/* 4. CANDYLAND DELIGHT */
+body.theme-candyland {
+  --bg-primary: #2a1124;
+  --bg-surface: rgba(64, 26, 56, 0.85);
+  --bg-surface-hover: rgba(90, 36, 78, 0.9);
+  --border-glass: rgba(244, 114, 182, 0.3);
+  --border-glow: rgba(236, 72, 153, 0.6);
+
+  --board-bg: #35142d;
+  --board-border: #db2777;
+  --tile-even: #4a1d40;
+  --tile-odd: #5d2551;
+  --tile-num-color: #fbcfe8;
+  --tile-border: rgba(244, 114, 182, 0.2);
+
+  --snake-head-color: #a855f7;
+  --snake-body-color: #7e22ce;
+  --snake-glow: rgba(168, 85, 247, 0.6);
+
+  --ladder-rail-color: #f43f5e;
+  --ladder-rung-color: #ffffff;
+  --ladder-glow: rgba(244, 63, 94, 0.5);
+
+  --btn-primary-bg: linear-gradient(135deg, #ec4899 0%, #f43f5e 50%, #fb7185 100%);
+  --btn-primary-shadow: 0 8px 25px rgba(236, 72, 153, 0.4);
+}
+
+/* 5. SPACE ODYSSEY */
+body.theme-space {
+  --bg-primary: #050515;
+  --bg-surface: rgba(17, 17, 48, 0.85);
+  --bg-surface-hover: rgba(28, 28, 75, 0.9);
+  --border-glass: rgba(147, 51, 234, 0.3);
+  --border-glow: rgba(168, 85, 247, 0.6);
+
+  --board-bg: #090924;
+  --board-border: #7c3aed;
+  --tile-even: #13133d;
+  --tile-odd: #1c1c58;
+  --tile-num-color: #c4b5fd;
+  --tile-border: rgba(168, 85, 247, 0.2);
+
+  --snake-head-color: #06b6d4;
+  --snake-body-color: #0891b2;
+  --snake-glow: rgba(6, 182, 212, 0.6);
+
+  --ladder-rail-color: #8b5cf6;
+  --ladder-rung-color: #c084fc;
+  --ladder-glow: rgba(139, 92, 246, 0.6);
+
+  --btn-primary-bg: linear-gradient(135deg, #7c3aed 0%, #6366f1 50%, #38bdf8 100%);
+  --btn-primary-shadow: 0 8px 25px rgba(124, 58, 237, 0.4);
+}
+
+/* 6. CLASSIC VINTAGE */
+body.theme-vintage {
+  --bg-primary: #1f1b16;
+  --bg-surface: rgba(45, 39, 32, 0.88);
+  --bg-surface-hover: rgba(65, 56, 46, 0.9);
+  --border-glass: rgba(180, 150, 110, 0.3);
+  --border-glow: rgba(212, 175, 55, 0.6);
+
+  --board-bg: #2d261e;
+  --board-border: #92400e;
+  --tile-even: #3d3429;
+  --tile-odd: #4d4234;
+  --tile-num-color: #fef3c7;
+  --tile-border: rgba(180, 150, 110, 0.2);
+
+  --snake-head-color: #15803d;
+  --snake-body-color: #166534;
+  --snake-glow: rgba(21, 128, 61, 0.4);
+
+  --ladder-rail-color: #b45309;
+  --ladder-rung-color: #d97706;
+  --ladder-glow: rgba(180, 83, 9, 0.4);
+
+  --btn-primary-bg: linear-gradient(135deg, #92400e 0%, #b45309 50%, #d97706 100%);
+  --btn-primary-shadow: 0 8px 25px rgba(180, 83, 9, 0.4);
+}
+
+/* Theme Picker Modal Grid Cards */
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 14px;
+}
+
+.theme-card {
+  background: var(--bg-surface);
+  border: 2px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  padding: 14px;
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.theme-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-glow);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.theme-card.active {
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+  background: rgba(6, 182, 212, 0.15);
+}
+
+.theme-preview-swatch {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.theme-card-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+}
